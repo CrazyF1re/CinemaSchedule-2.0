@@ -1,0 +1,104 @@
+html,body,header{
+    margin:0;
+    padding:0; 
+    background-color: rgba(20, 96, 172);
+    width: 100%;
+}
+
+header{
+    font-size: 40px;
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    margin:0;
+}
+header>pre{
+    font-family: Courier, monospace;
+    font-weight: lighter;
+}
+.list{
+    padding:0;
+    margin: auto;
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: center; 
+    list-style-type: none;
+}
+.list>li :hover{ 
+    background: rgb(22, 77, 132);
+    border: 1px solid rgb(17, 36, 56);
+    margin:14px;
+}
+.list>li>a{
+    text-decoration:none;
+    color: black; 
+    display: inline-block; 
+    flex-direction: column; 
+    width: 200px;
+    margin:15px; 
+    vertical-align: top;
+}
+.list>li>a>img{
+    width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    margin:0;
+    pointer-events: none;
+}
+.list>li>a>pre{
+    pointer-events: none;
+    text-align: center;
+    width: 200px;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap; 
+    white-space: -pre-wrap; 
+    white-space: -o-pre-wrap; 
+    word-wrap: break-word;
+    font-size: 16px;
+    margin-top: 7px;
+}
+.choose_cinemas{
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: center;
+    margin:0;
+    padding:0;
+    align-items: flex-end;
+    margin-bottom: 20px;
+}
+.choose_cinemas>li{
+    display: inline-block;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-bottom: 15px;
+    font-size: 22px;
+    text-align: center;
+    
+}
+.choose_cinemas > li > div:hover{
+    cursor:pointer;
+}
+.choose_btn{
+    display: block;
+    margin: auto;   
+    margin-bottom: 20px;
+    width: 150px;
+    height: 35px;
+    border-radius: 15px;
+    border-width: 0;
+    font-size: 17px;
+    text-align: center;
+    background-color:azure;
+    cursor: pointer;
+}
+.choose_btn {
+    box-shadow: 0 5px 15px 0 rgba(11, 99, 246, 1);
+    transition: 0.5s;
+}
+  
+.choose_btn:hover {
+    box-shadow: 0 0px 40px 0 rgb(152, 190, 255);
+}
+.text{
+    border-radius: 12px;
+}

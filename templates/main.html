@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', path='/main.css') }}">
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/425/425868.png" type="image/x-icon">
+    
+
+    <title>Cinema Schedule</title>
+</head>
+<body>
+    <header>
+        <pre>Cinema Schedule</pre>
+    </header>
+    <main>
+        <ul class="choose_cinemas">
+            <li class="cinema" id = '1'>
+                <div><img src="https://goodwincinema.ru/img/logo.png" alt="" style="width: 180px;"></div>
+                <div class="text">Goodwin Cinema</div>
+                
+            </li>
+            <li class="cinema" id = '2'>
+                <div><img src="https://kinomax.tomsk.ru/img/logo.png" alt="" style="width: 150px;"></div>
+                <div class="text">Kinomax</div>
+            </li>
+            <li class="cinema" id = '3'>
+                <div><img src="https://my.p24.app/files/98484ba5-e0e5-402f-876d-7ee76f607c11.svg" alt="" style="width: 150px;"></div>
+                <div class="text">Kinooctober</div>
+            </li>
+            <li class="cinema" id = '4'>
+                <div><img src="https://kino-polis.ru/img/new/logo.png" alt="" style="width: 150px;"></div>
+                <div class="text">Kinopolis</div>
+            </li>
+            <li class="cinema" id = '5'>
+                <div ><img src="https://cdn.premierzal.ru/files/image/ivxgoqumhewik-ux.png" alt="" style="width: 150px;"></div>
+                <div class="text">Kinoseversk</div>
+            </li>
+        </ul>
+        <button class="choose_btn" type="button">Выбрать</button>
+        <ul class="list" >
+            {% for film in films -%}
+            <li>
+                <a href="{{film[2]}}" >
+                    <img src={{film[1]}} alt="">
+                    <pre>
+                        {{film[0]}}
+                    </pre>
+                </a>
+            </li>
+            {% endfor -%}
+        </ul>
+        
+    </main>
+    <footer>
+
+    </footer>
+</body>
+<script>
+    document.querySelectorAll('li[class="cinema"]').forEach(elem =>{
+        elem.onclick = function(){
+
+            if (elem.querySelector('div[class="text"]').style['background-color']==''){
+                elem.querySelector('div[class="text"]').style = "background-color: rgb(68, 226, 44);"
+            }
+            else{
+                elem.querySelector('div[class="text"]').style['background-color'] = ''
+            }
+        }
+        
+})
+</script>
+</html>
+
