@@ -17,7 +17,15 @@ def get_main(request: Request):
     meta.reflect(engine)
     film_table = meta.tables['film_table']
     sessions_table = meta.tables['sessions_table']
-    with engine.connect() as connection:
-            films = connection.execute(film_table.select().group_by(film_table.c.name).where(film_table.c.img_url !='').with_only_columns(film_table.c.name,film_table.c.img_url,film_table.c.url)).fetchall()
-
+    
+    if (request.cookies.get('cinemas')):
+        cinemas = [int(i) for i in request.cookies.get('cinemas').split(',')]
+        with engine.connect() as connection:
+            films = connection.execute(film_table.select().group_by(film_table.c.name).where(film_table.c.img_url !='' and film_table.c.id_cinema.in_(cinemas)).with_only_columns(film_table.c.name,film_table.c.img_url,film_table.c.url)).fetchall()
+    else:
+        with engine.connect() as connection:
+            films = connection.execute(film_table.select().group_by(film_table.c.name).where(film_table.c.img_url !='').with_only_columns(film_table.c.name,film_table.c.img_url,film_table.c.url)).fetchall()     
+    
+    
+    
     return templates.TemplateResponse(request=request, name='main.html',context={"films":films})

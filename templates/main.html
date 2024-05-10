@@ -66,9 +66,34 @@
             else{
                 elem.querySelector('div[class="text"]').style['background-color'] = ''
             }
-        }
-        
-})
+        }    
+    })
+    function set_cookies(){
+        cinemas = []
+        document.querySelectorAll('li[class="cinema"]').forEach(elem =>{
+            
+            if(elem.querySelector('div[class="text"]').style['background-color'] != ''){
+                cinemas.push(Number(elem['id']))
+            }
+        })
+        document.cookie = `cinemas=${cinemas}`
+        location.reload()
+    }    
+    document.querySelector('button[class="choose_btn"]').onclick = set_cookies
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+    function set_colors(){
+        cinemas =   JSON.parse("[" + getCookie('cinemas') + "]");  
+        document.querySelectorAll('li[class="cinema"]').forEach(elem=>{
+            if (cinemas.includes(Number(elem['id']))){
+                elem.querySelector('div[class="text"]').style = 'background-color: rgb(68, 226, 44);'
+            }
+        })
+    }
+    set_colors()
 </script>
 </html>
 
