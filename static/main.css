@@ -102,3 +102,10 @@ header>pre{
 .text{
     border-radius: 12px;
 }
+.film_img{
+    width: 300px;
+    display: block;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

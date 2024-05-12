@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', path='/main.css') }}">
+    <title>{{info[0]}}</title>
+</head>
+<body>
+    <img src="{{info[1]}}" alt="" class="film_img">
+    {% for cinema in info[2] -%}
+            <ul>
+                {% for sessions in cinema.items() -%}
+                    {% for session in sessions[1] -%}
+                        <li>
+                    
+                            <div>{{session[0].strftime('%d/%m %H:%M')}}</div>
+                            <div>{{session[1]}}</div>
+                    
+                        </li>
+                    {% endfor -%}                    
+                {% endfor -%}
+            </ul>
+    {% endfor -%}
+</body>
+</html>
