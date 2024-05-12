@@ -4,14 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', path='/main.css') }}">
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/425/425868.png" type="image/x-icon">
     <title>{{info[0]}}</title>
 </head>
 <body>
     <img src="{{info[1]}}" alt="" class="film_img">
     {% for cinema in info[2] -%}
-            <ul>
-                {% for sessions in cinema.items() -%}
-                    {% for session in sessions[1] -%}
+            <ul class="cinema_table">
+                
+                {% for key,sessions in cinema.items() -%}
+                    <img id = {{key}}>
+                    {% for session in sessions -%}
                         <li>
                     
                             <div>{{session[0].strftime('%d/%m %H:%M')}}</div>
@@ -23,4 +26,17 @@
             </ul>
     {% endfor -%}
 </body>
+<script>
+    cinema_logos = ['https://goodwincinema.ru/img/logo.png',
+                    'https://kinomax.tomsk.ru/img/logo.png',
+                    'https://my.p24.app/files/98484ba5-e0e5-402f-876d-7ee76f607c11.svg',
+                    'https://kino-polis.ru/img/new/logo.png',
+                    'https://cdn.premierzal.ru/files/image/ivxgoqumhewik-ux.png']
+    for (let index = 1; index < 6; index++) {
+        if(document.querySelector(`img[id="${index}"]`)){
+            document.querySelector(`img[id="${index}"]`).src = cinema_logos[index-1]
+        }
+        
+    }
+</script>
 </html>

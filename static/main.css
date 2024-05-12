@@ -109,3 +109,6 @@ header>pre{
     margin-top: 20px;
     margin-bottom: 20px;
 }
+.cinema_table > img{
+    width: 200px;
+}

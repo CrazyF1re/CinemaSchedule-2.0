@@ -48,24 +48,24 @@ def get_film(request:Request,film):
     sessions_table = meta.tables['sessions_table']
 
     with engine.connect() as connection:
-        film_id = connection.execute(film_table.select()
-                                    .where(film_table.c.name == unquote(film))
-                                    .where(film_table.c.cinema_id.in_(cinemas))
-                                    .with_only_columns(film_table.c.id)).fetchall()
-        film_id = [item[0]  for item in film_id]
-        print(film_id,cinemas)
         all_sessions = []
         all_sessions.append(unquote(film))
+        print(all_sessions[0])
         all_sessions.append(connection.execute(film_table.select()
                                     .where(film_table.c.name == unquote(film))
                                     .with_only_columns(film_table.c.img_url))
                                     .fetchone()[0])
         all_sessions.append([])
-        for id,cinema in zip(film_id,cinemas):   
-            sessions =connection.execute(sessions_table.select()
-                                        .where(sessions_table.c.film_id == id)
+        for cinema in cinemas:   
+            film_id = connection.execute(film_table.select()
+                                    .where(film_table.c.name == unquote(film))
+                                    .where(film_table.c.cinema_id == cinema)
+                                    .with_only_columns(film_table.c.id)).fetchone()
+            if (film_id):
+                sessions =connection.execute(sessions_table.select()
+                                        .where(sessions_table.c.film_id == film_id[0])
                                         .with_only_columns(sessions_table.c.datetime,sessions_table.c.price)).fetchall()
-            all_sessions[2].append({cinema:sessions})
+                all_sessions[2].append({cinema:sessions})
     print(all_sessions)
     return templates.TemplateResponse(request=request, name='film.html',context={"info":all_sessions})
     

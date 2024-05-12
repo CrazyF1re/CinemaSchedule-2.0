@@ -41,7 +41,7 @@
         <ul class="list" >
             {% for film in films -%}
             <li>
-                <a href="/films/{{film[0]}}" >
+                <a href="films/{{film[0]}}" >
                     <img src={{film[1]}} alt="">
                     <pre>
                         {{film[0]}}
@@ -94,6 +94,11 @@
         })
     }
     set_colors()
+    document.querySelectorAll('pre').forEach(elem =>{
+    if(elem.innerHTML.includes('?')){
+      elem.parentElement.href =  encodeURI(decodeURI(elem.parentElement.href).replace('?','%3f'))   
+        }
+    })
 </script>
 </html>
 
