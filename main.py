@@ -19,7 +19,10 @@ def get_main(request: Request):
     film_table = meta.tables['film_table']
     
     if (request.cookies.get('cinemas')):
-        cinemas = [int(i) for i in request.cookies.get('cinemas').split(',')]
+        try:
+            cinemas = [int(i) for i in request.cookies.get('cinemas').split(',')]
+        except:
+            cinemas = [1,2,3,4,5]
         with engine.connect() as connection:
             films = connection.execute(film_table.select().group_by(film_table.c.name)
                                        .where(film_table.c.img_url !='')
@@ -40,8 +43,6 @@ def get_film(request:Request,film):
     else:
         cinemas = [1,2,3,4,5]
     engine = create_engine('sqlite:///database.db')
-    Session = sessionmaker(bind=engine)
-    session = Session()
     meta = MetaData()
     meta.reflect(engine)
     film_table = meta.tables['film_table']
@@ -50,22 +51,26 @@ def get_film(request:Request,film):
     with engine.connect() as connection:
         all_sessions = []
         all_sessions.append(unquote(film))
-        print(all_sessions[0])
         all_sessions.append(connection.execute(film_table.select()
                                     .where(film_table.c.name == unquote(film))
                                     .with_only_columns(film_table.c.img_url))
                                     .fetchone()[0])
         all_sessions.append([])
+        all_sessions.append({})
         for cinema in cinemas:   
             film_id = connection.execute(film_table.select()
                                     .where(film_table.c.name == unquote(film))
                                     .where(film_table.c.cinema_id == cinema)
                                     .with_only_columns(film_table.c.id)).fetchone()
             if (film_id):
+                film_url = connection.execute(film_table.select()
+                                          .where(film_table.c.cinema_id == cinema)
+                                          .where(film_table.c.name == unquote(film))
+                                          .with_only_columns(film_table.c.url)).fetchone()
                 sessions =connection.execute(sessions_table.select()
                                         .where(sessions_table.c.film_id == film_id[0])
                                         .with_only_columns(sessions_table.c.datetime,sessions_table.c.price)).fetchall()
                 all_sessions[2].append({cinema:sessions})
-    print(all_sessions)
+                all_sessions[3][cinema] = film_url
     return templates.TemplateResponse(request=request, name='film.html',context={"info":all_sessions})
     

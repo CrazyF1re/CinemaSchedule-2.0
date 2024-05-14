@@ -15,13 +15,12 @@
                 {% for key,sessions in cinema.items() -%}
                     <img id = {{key}}>
                     {% for session in sessions -%}
-                        <li>
-                    
-                            <div>{{session[0].strftime('%d/%m %H:%M')}}</div>
-                            <div>{{session[1]}}</div>
-                    
+                        <li class="info">
+                            <div class="datetime">{{session[0].strftime('%d/%m %H:%M')}}</div>
+                            <div class="price">{{session[1]}}р.</div>
                         </li>
-                    {% endfor -%}                    
+                    {% endfor -%}
+                    <a href={{info[3][key][0]}} class = "film_url">Перейти в кинотеатр</a>
                 {% endfor -%}
             </ul>
     {% endfor -%}
@@ -38,5 +37,10 @@
         }
         
     }
+    document.querySelectorAll('div[class="price"]').forEach(elem => {
+        if (elem.innerHTML.length > 5){
+            elem.innerHTML = elem.innerHTML.slice(0,3) + '-' + elem.innerHTML.slice(3,elem.innerHTML.length)
+        }
+    })
 </script>
 </html>
