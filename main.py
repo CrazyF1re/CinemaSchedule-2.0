@@ -3,7 +3,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import create_engine, MetaData
 from urllib.parse import unquote
-from sqlalchemy.orm import sessionmaker
+from datetime import datetime
 
 app = FastAPI()
 templates = Jinja2Templates(directory='templates')
@@ -69,6 +69,7 @@ def get_film(request:Request,film):
                                           .with_only_columns(film_table.c.url)).fetchone()
                 sessions =connection.execute(sessions_table.select()
                                         .where(sessions_table.c.film_id == film_id[0])
+                                        .where(sessions_table.c.datetime > datetime.now())
                                         .with_only_columns(sessions_table.c.datetime,sessions_table.c.price)).fetchall()
                 all_sessions[2].append({cinema:sessions})
                 all_sessions[3][cinema] = film_url
