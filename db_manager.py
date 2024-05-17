@@ -5,6 +5,8 @@ import kinopolis_api
 import kinoseversk_api
 from sqlalchemy import MetaData,Table,Column,Integer,String,create_engine,ForeignKey,Date,DateTime,text,insert,select
 from sqlalchemy_utils import create_database
+from sqlalchemy.sql.expression import bindparam
+
 
 from datetime import datetime
 import os
@@ -69,16 +71,34 @@ class manager():
             connection.execute(text("DELETE FROM film_table"))
             connection.execute(text("DELETE FROM sessions_table"))
             connection.commit()
+            film_table_data = []
+            sessions_table_data= []
             for cinema,films in res.items():
                 for film in films:
-                    connection.execute(insert(film_table).values(name = film[0], img_url = film[3],url = film[2],cinema_id = cinema))
-                    connection.commit()
+                    film_table_data.append({"name":film[0],"img_url":film[3], "url":film[2], "cinema_id":cinema})
+
+            connection.execute(insert(film_table).values({
+                "name":bindparam('name'),
+                'img_url':bindparam('img_url'),
+                'url':bindparam('url'),
+                'cinema_id':bindparam('cinema_id')
+            }),film_table_data)
+            connection.commit()  
+
+            for cinema,films in res.items():
+                for film in films:
                     film_id = connection.execute(select(film_table.c.id).where(film_table.c.name == film[0],film_table.c.cinema_id == cinema)).fetchone()[0]
                     for date,times in film[1].items():
                         for time in times:
                             film_time = datetime.strptime( f'{date} {time[0]}',"%d.%m.%Y %H:%M")
-                            connection.execute(insert(sessions_table).values(film_id = film_id,datetime = film_time,price = time[1]))
-                            connection.commit()
+                            sessions_table_data.append({"film_id":film_id,"datetime":film_time,"price":time[1]})
+            
+            connection.execute(insert(sessions_table).values({
+                "film_id":bindparam('film_id'),
+                'datetime':bindparam('datetime'),
+                'price':bindparam('price')
+            }),sessions_table_data)
+            connection.commit()
 
         
 
