@@ -3,7 +3,7 @@ import parsers.kinomax_api
 import parsers.kinooctober_api
 import parsers.kinopolis_api
 import parsers.kinoseversk_api
-from sqlalchemy import MetaData,Table,Column,Integer,String,create_engine,ForeignKey,Date,DateTime,text,insert,select
+from sqlalchemy import MetaData,Table,Column,Integer,String,create_engine,ForeignKey,Date,DateTime,text,insert,select,Boolean
 from sqlalchemy_utils import create_database
 from sqlalchemy.sql.expression import bindparam
 
@@ -47,6 +47,21 @@ class manager():
                         {'name':"Kinoseversk"}]))
                 
                 connection.commit()
+    def init_users_db(self):
+        if(not os.path.isfile('./test.db')):
+            engine = create_engine('sqlite:///test.db')
+            create_database(engine.url)
+            meta = MetaData()
+            users = Table(
+                    'user',meta,
+                    Column('id',Integer,primary_key=True),
+                    Column('email',String),
+                    Column('hashed_password',String),
+                    Column('is_active',Boolean),
+                    Column('is_superuser',Boolean),
+                    Column('is_verified',Boolean)
+                )
+            meta.create_all(engine)
     def update_db(self):
         res = {}
 
@@ -99,7 +114,7 @@ class manager():
                 'price':bindparam('price')
             }),sessions_table_data)
             connection.commit()
-
+    
         
 
 
