@@ -1,8 +1,8 @@
-import goodwin_api
-import kinomax_api
-import kinooctober_api
-import kinopolis_api
-import kinoseversk_api
+import parsers.goodwin_api
+import parsers.kinomax_api
+import parsers.kinooctober_api
+import parsers.kinopolis_api
+import parsers.kinoseversk_api
 from sqlalchemy import MetaData,Table,Column,Integer,String,create_engine,ForeignKey,Date,DateTime,text,insert,select
 from sqlalchemy_utils import create_database
 from sqlalchemy.sql.expression import bindparam
@@ -50,11 +50,11 @@ class manager():
     def update_db(self):
         res = {}
 
-        functions = [goodwin_api.get_films,
-                     kinomax_api.get_films,
-                     kinooctober_api.get_films,
-                     kinopolis_api.get_films,
-                     kinoseversk_api.get_films
+        functions = [parsers.goodwin_api.get_films,
+                     parsers.kinomax_api.get_films,
+                     parsers.kinooctober_api.get_films,
+                     parsers.kinopolis_api.get_films,
+                     parsers.kinoseversk_api.get_films
                      ]
         i = 1
         for func in functions:

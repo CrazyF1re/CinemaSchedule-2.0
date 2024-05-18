@@ -4,6 +4,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy import create_engine, MetaData
 from urllib.parse import unquote
 from datetime import datetime
+from fastapi.responses import RedirectResponse
 
 app = FastAPI()
 templates = Jinja2Templates(directory='templates')
@@ -75,3 +76,14 @@ def get_film(request:Request,film):
                 all_sessions[3][cinema] = film_url
     return templates.TemplateResponse(request=request, name='film.html',context={"info":all_sessions})
     
+@app.get('/login')
+def login(request: Request):
+    if (request.cookies.get('token')):
+        return RedirectResponse('/')
+    return templates.TemplateResponse(request=request, name='login.html')
+
+@app.get('/register')
+def register(request: Request):
+    if (request.cookies.get('token')):
+        return RedirectResponse('/')
+    return templates.TemplateResponse(request=request, name='register.html')
