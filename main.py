@@ -5,27 +5,16 @@ from sqlalchemy import create_engine, MetaData
 from urllib.parse import unquote
 from datetime import datetime
 from fastapi.responses import RedirectResponse
-from auth.auth import auth_backend
-from auth.database import User
-from auth.manager import get_user_manager
-from auth.schemas import UserRead, UserCreate
-from fastapi_users import fastapi_users, FastAPIUsers
+
 
 app = FastAPI()
 templates = Jinja2Templates(directory='templates')
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-fastapi_users = FastAPIUsers[User, int](
-    get_user_manager,
-    [auth_backend],
-)
 
-app.include_router(
-    fastapi_users.get_register_router(UserRead, UserCreate),
-    prefix="",
-    tags=["register"],
-)
+
+
 
 @app.get('/')
 def get_main(request: Request):

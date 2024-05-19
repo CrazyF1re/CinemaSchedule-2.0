@@ -12,11 +12,11 @@
         <h2>Вход</h2>
         <form autocomplete="off" id="form_id" onsubmit="javascript:return validate('form_id','email');" method="POST">
           <div class="user-box">
-            <input type="text" name="email" id = "email">
+            <input type="text" name="email" id = "email" required="">
             <label>Почта</label>
           </div>
           <div class="user-box">
-            <input type="password" name="password ">
+            <input type="password" name="password " required="">
             <label>Пароль</label>
           </div>
           <input type="submit" value="Отправить" class="submit_btn">
