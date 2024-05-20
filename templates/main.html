@@ -12,6 +12,13 @@
 <body>
     <header>
         <pre>Cinema Schedule</pre>
+        {% if token %}
+        <button class="login" onclick="logout()">Выйти</button>
+        <button class="register" onclick="go_to_lk()">Личный кабинет</button>
+        {% else %}
+            <button class="login" onclick="go_to_login()">Войти</button>
+            <button class="register" onclick="go_to_register()">Зарегистрироваться</button>
+        {% endif %}
     </header>
     <main>
         <ul class="choose_cinemas">
@@ -57,6 +64,19 @@
     </footer>
 </body>
 <script>
+    function go_to_lk(){
+        location.href = '/lk'
+    }
+    function logout(){
+        fetch('/logout', {method:'POST'})
+        setTimeout(function(){location.reload()},100)
+    }
+    function go_to_login(){
+        location.href = '/login'
+    }
+    function go_to_register(){
+        location.href = '/register'
+    }
     document.querySelectorAll('li[class="cinema"]').forEach(elem =>{
         elem.onclick = function(){
 

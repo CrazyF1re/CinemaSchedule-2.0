@@ -143,6 +143,33 @@ header>pre{
 .price{
     display: flex;
 }
+
+.login, .register {
+    width: 170px;
+    height: 40px;
+    margin: 10px;
+    position: absolute;
+    background-color: rgb(0, 255, 149);
+    border: none;
+    border-radius: 7px;
+    font-size: 16px;
+    transition: 1.5s;
+}
+.login{
+    top:65px;
+    right: 2%;
+    
+}
+.register{
+    top:5px;
+    right: 2%;
+}
+
+.register:hover, .login:hover{
+    background-color: rgb(246, 255, 0);
+    
+}
+
 .film_url{
     background-color: rgb(79 247 255 / 82%);
     height: 24px;
@@ -171,5 +198,14 @@ header>pre{
     .film_url{
         margin-left: 0px;
         margin-top: 10px;
+    }
+}
+
+@media (max-width: 800px) {
+    .login, .register{
+        position: unset;
+    }
+    header{
+        align-items: center;
     }
 }

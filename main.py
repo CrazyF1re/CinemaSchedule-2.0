@@ -41,8 +41,11 @@ def get_main(request: Request):
             films = connection.execute(film_table.select().group_by(film_table.c.name)
                                        .where(film_table.c.img_url !='')
                                        .with_only_columns(film_table.c.name,film_table.c.img_url)).fetchall()     
-    
-    return templates.TemplateResponse(request=request, name='main.html',context={"films":films})
+            
+    context = {"films":films, 'token':False}
+    if request.cookies.get('token'):
+        context['token'] = True
+    return templates.TemplateResponse(request=request, name='main.html',context=context)
 
 @app.get('/films/{film}/')
 def get_film(request:Request,film):
@@ -81,7 +84,10 @@ def get_film(request:Request,film):
                                         .with_only_columns(sessions_table.c.datetime,sessions_table.c.price)).fetchall()
                 all_sessions[2].append({cinema:sessions})
                 all_sessions[3][cinema] = film_url
-    return templates.TemplateResponse(request=request, name='film.html',context={"info":all_sessions})
+    context = {"info":all_sessions, 'token' :False}
+    if request.cookies.get('token'):
+        context['token'] = True
+    return templates.TemplateResponse(request=request, name='film.html',context=context)
     
 @app.get('/login')
 def login(request: Request):
@@ -94,6 +100,16 @@ def register(request: Request):
     if (request.cookies.get('token')):
         return RedirectResponse('/')
     return templates.TemplateResponse(request=request, name='register.html')
+
+
+@app.get('/lk')
+def lk(request:Request):
+    if (request.cookies.get('token')):
+        return 0
+    return RedirectResponse('/')
+    
+    #get info about planned sending emails 
+
 
 @app.post('/register')
 async def register_user( email: Annotated[str, Form()], password: Annotated[str, Form()], request: Request):
@@ -141,4 +157,4 @@ async def logout_user(response:Response):
     #check cookies and look for JWT token
     #logout user if token was founded
     #return some template if user has no token
-    pass
+

@@ -1,0 +1,85 @@
+html,body,header{
+    margin:0;
+    padding:0; 
+    background-color: rgba(20, 96, 172);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+body,header{
+    width: 1000px;
+    border-radius: 15px;
+    padding: 15px;
+    background-color: rgb(28, 67, 107);
+}
+body{
+    margin-top:50px ;
+    
+}
+
+.email{
+    
+    font-size: 28px;
+    margin: 20px;
+    display: flex;
+    background: inherit;
+    justify-content: center;
+}
+.delete_accaunt{
+    width: 250px;
+    height: 40px;
+    border: none;
+    background-color: rgb(144, 78, 244);
+    margin: 30px;
+    border-radius: 10px;
+    font-size: 18px;
+}
+.list{
+    display: flex;
+    flex-direction: column;
+}
+.list>input{
+    background-color: inherit;
+
+}
+ul{
+    list-style-type: none;
+    padding: 0;
+}
+ul>li>input{
+    transform:scale(1.5);
+    margin: 10px;
+}
+ul>li{
+    font-size: 26px;
+    border:1px solid white;
+    padding: 15px;
+}
+.go_back{
+    background-color: rgb(144, 78, 244);
+    border:none;
+    font-size: 18px;
+    width: 70px;
+    height: 70px;
+    border-radius: 15px;
+    display: block;
+    margin-right: 930px;
+}
+@media (max-width:1050px){
+    body,header{
+        width: 375px;
+    }
+    .go_back{
+        margin-right: 310px;
+    }
+}
+@media (max-width:410px){
+    body,header{
+        width: 320px;
+    }
+    .go_back{
+        margin-right: 260px;
+    }
+}

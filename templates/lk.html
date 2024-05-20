@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/425/425868.png" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', path='/lk.css') }}">
+    <link rel="stylesheet" href="../static/lk.css">
+    <title>Личный кабинет</title>
+</head>
+<body>
+    <button class="go_back">Назад</button>
+    <header>
+        <div class="email">vova.plisko@mail.ru</div>
+    </header>
+    <h3>Список фильмов для уведомлений</h3>
+    <form action="" class="list">
+        <ul>
+            <li><input type="checkbox"> рассылка 1<br /></li>
+            <li><input type="checkbox"> рассылка 2<br /></li>
+            <li><input type="checkbox"> рассылка 3<br /></li>
+            <li><input type="checkbox"> рассылка 4<br /></li>
+            <li><input type="checkbox"> рsdfdsассылка 5<br /></li>
+            <li><input type="checkbox"> рассылка 6<br /></li>
+            <li><input type="checkbox"> рассылка 7<br /></li>
+        </ul>
+        
+        
+        
+    </form>
+    <button class="delete_accaunt" onclick="delete_acc()">Удалить рассылку</button>
+    <button class="delete_accaunt" onclick="delete_acc()">Удалить аккаунт</button>
+</body>
+<script>
+    function delete_acc(){
+        // post request to delete acc
+    }
+</script>
+</html>

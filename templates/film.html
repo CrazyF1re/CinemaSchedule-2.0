@@ -9,6 +9,13 @@
 </head>
 <body>
     <img src="{{info[1]}}" alt="" class="film_img">
+    {% if token %}
+        <button class="login" onclick="logout()">Выйти</button>
+        <button class="register" onclick="go_to_lk()">Личный кабинет</button>
+        {% else %}
+            <button class="login" onclick="go_to_login()">Войти</button>
+            <button class="register" onclick="go_to_register()">Зарегистрироваться</button>
+        {% endif %}
     {% for cinema in info[2] -%}
             <ul class="cinema_table">
                 
@@ -26,6 +33,16 @@
     {% endfor -%}
 </body>
 <script>
+    function logout(){
+        fetch('/logout', {method:'POST'})
+        setTimeout(function(){location.reload()},100)
+    }
+    function go_to_login(){
+        location.href = '/login'
+    }
+    function go_to_register(){
+        location.href = '/register'
+    }
     cinema_logos = ['https://goodwincinema.ru/img/logo.png',
                     'https://kinomax.tomsk.ru/img/logo.png',
                     'https://my.p24.app/files/98484ba5-e0e5-402f-876d-7ee76f607c11.svg',
