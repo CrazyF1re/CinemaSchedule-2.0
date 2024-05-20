@@ -16,21 +16,24 @@
             <label>Почта</label>
           </div>
           <div class="user-box">
-            <input type="password" name="password " required="">
+            <input type="password" name="password" required="">
             <label>Пароль</label>
           </div>
           <input type="submit" value="Отправить" class="submit_btn">
+          {% if bad %}
+          <div style="color: red; font-size: 16px;">Неверный логин или пароль</div>
+          {% endif %}
         </form>
       </div>
 </body>
 <script>
     function validate(form_id,email) {
-        var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-        var address = document.forms[form_id].elements[email].value;
-        if(reg.test(address) == false) {
-            alert('Введите корректный e-mail');
-            return false;
-        }
+        // var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+        // var address = document.forms[form_id].elements[email].value;
+        // if(reg.test(address) == false) {
+        //     alert('Введите корректный e-mail');
+        //     return false;
+        // }
     }
 
 </script>

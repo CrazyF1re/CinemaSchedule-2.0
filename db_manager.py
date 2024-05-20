@@ -7,16 +7,19 @@ from sqlalchemy import MetaData,Table,Column,Integer,String,create_engine,Foreig
 from sqlalchemy_utils import create_database
 from sqlalchemy.sql.expression import bindparam
 
-
 from datetime import datetime
 import os
 
 
 class manager():
+    def __init__(self):
+        self.user_engine = create_engine("sqlite:///user.db")
+        self.film_engine = create_engine('sqlite:///database.db')
+        self.init_db()
+        self.init_users_db()
     def init_db(self):
         if(not os.path.isfile('./database.db')):
-            engine = create_engine('sqlite:///database.db')
-            create_database(engine.url)
+            create_database(self.user_engine.url)
             meta = MetaData()
             cinema_table = Table(
                 'cinema_table',meta,
@@ -37,8 +40,8 @@ class manager():
                 Column('datetime', DateTime),
                 Column('price',Integer),
             )
-            meta.create_all(engine)
-            with engine.connect() as connection:
+            meta.create_all(self.film_engine)
+            with self.film_engine.connect() as connection:
                 connection.execute(insert(cinema_table).values([  
                         {'name':"Goodwin Cinema"},
                         {'name':"Kinomax"},
@@ -48,20 +51,16 @@ class manager():
                 
                 connection.commit()
     def init_users_db(self):
-        if(not os.path.isfile('./test.db')):
-            engine = create_engine('sqlite:///test.db')
-            create_database(engine.url)
+        if(not os.path.isfile('./user.db')):
+            create_database(self.user_engine.url)
             meta = MetaData()
             users = Table(
                     'user',meta,
                     Column('id',Integer,primary_key=True),
                     Column('email',String),
                     Column('hashed_password',String),
-                    Column('is_active',Boolean),
-                    Column('is_superuser',Boolean),
-                    Column('is_verified',Boolean)
                 )
-            meta.create_all(engine)
+            meta.create_all(self.user_engine)
     def update_db(self):
         res = {}
 

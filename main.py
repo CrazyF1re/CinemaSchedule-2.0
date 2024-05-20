@@ -1,24 +1,27 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Response,Form, status
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from sqlalchemy import create_engine, MetaData
+from sqlalchemy import MetaData,insert
 from urllib.parse import unquote
 from datetime import datetime
 from fastapi.responses import RedirectResponse
-
+from db_manager import manager
+import bcrypt
+from typing import Annotated
+import jwt
 
 app = FastAPI()
 templates = Jinja2Templates(directory='templates')
+database = manager()
+
+SECRET = "SECRET"
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
-
-
-
 @app.get('/')
 def get_main(request: Request):
-    engine = create_engine('sqlite:///database.db')
+    engine = database.film_engine
     meta = MetaData()
     meta.reflect(engine)
     film_table = meta.tables['film_table']
@@ -47,7 +50,7 @@ def get_film(request:Request,film):
         cinemas = [int(i) for i in request.cookies.get('cinemas').split(',')]
     else:
         cinemas = [1,2,3,4,5]
-    engine = create_engine('sqlite:///database.db')
+    engine = database.film_engine
     meta = MetaData()
     meta.reflect(engine)
     film_table = meta.tables['film_table']
@@ -91,3 +94,51 @@ def register(request: Request):
     if (request.cookies.get('token')):
         return RedirectResponse('/')
     return templates.TemplateResponse(request=request, name='register.html')
+
+@app.post('/register')
+async def register_user( email: Annotated[str, Form()], password: Annotated[str, Form()], request: Request):
+    engine = database.user_engine
+    meta = MetaData()
+    meta.reflect(engine)
+    users = meta.tables['user']
+    with engine.connect() as connection:
+        if(connection.execute(users.select().where(users.c.email == email)).fetchone()):
+            print('пользователь уже существует')
+            return templates.TemplateResponse(request=request,name='register.html', context={"bad":True})
+        connection.execute(insert(users).values(email = email, hashed_password = bcrypt.hashpw(str.encode(password),bcrypt.gensalt())))
+        connection.commit()
+        user_id = connection.execute(users.select().where(users.c.email == email).with_only_columns(users.c.id)).fetchone()[0]
+    
+    #get JWT to user
+    encoded_jwt = jwt.encode({"id": user_id, "email":email}, SECRET, algorithm="HS256")
+    #set JWT into cookie
+    res = RedirectResponse('/', status_code= status.HTTP_302_FOUND)
+    res.set_cookie(key="token",value=encoded_jwt, httponly=True)
+    return res
+
+
+@app.post('/login')
+async def login_user(email: Annotated[str, Form()], password: Annotated[str, Form()],request: Request):
+    #validate user
+    engine = database.user_engine
+    meta = MetaData()
+    meta.reflect(engine)
+    users = meta.tables['user']
+    with engine.connect() as connection:
+        user_info = connection.execute(users.select().where(users.c.email == email).with_only_columns(users.c.hashed_password, users.c.id)).fetchone()
+        if(user_info and bcrypt.checkpw(str.encode(password), user_info[0])):
+            encoded_jwt = jwt.encode({"id": user_info[1], "email": email}, SECRET, algorithm="HS256")
+            res = RedirectResponse('/', status_code= status.HTTP_302_FOUND)
+            res.set_cookie(key="token",value=encoded_jwt, httponly=True)
+            return res
+        return templates.TemplateResponse(request=request,name='login.html', context={"bad":True})
+
+@app.post('/logout')
+async def logout_user(response:Response):
+    resp = RedirectResponse('/', status_code= status.HTTP_302_FOUND)
+    resp.delete_cookie('token')
+    return resp
+    #check cookies and look for JWT token
+    #logout user if token was founded
+    #return some template if user has no token
+    pass
