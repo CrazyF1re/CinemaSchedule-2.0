@@ -78,6 +78,9 @@ ul>li{
     flex-direction: column;
     align-items: center;
 }
+.add_film:hover{
+    cursor: pointer;
+}
 .film{
     width: 250px;
     height: 25px;
@@ -85,6 +88,10 @@ ul>li{
     border: none;
     margin: 10px;
     border-radius: 5px;
+}
+.add_film_header{
+    font-size: 22px;
+    margin-bottom: 10px;
 }
 .add_film{
     width: 150px;
