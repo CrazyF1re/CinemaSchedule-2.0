@@ -8,14 +8,17 @@
     <title>{{info[0]}}</title>
 </head>
 <body>
-    <img src="{{info[1]}}" alt="" class="film_img">
-    {% if token %}
+    <header>
+        <pre onclick="go_to_main()">Cinema Schedule</pre>
+        {% if token %}
         <button class="login" onclick="logout()">Выйти</button>
         <button class="register" onclick="go_to_lk()">Личный кабинет</button>
         {% else %}
             <button class="login" onclick="go_to_login()">Войти</button>
             <button class="register" onclick="go_to_register()">Зарегистрироваться</button>
         {% endif %}
+    </header>
+    <img src="{{info[1]}}" alt="" class="film_img">
     {% for cinema in info[2] -%}
             <ul class="cinema_table">
                 
@@ -37,8 +40,14 @@
         fetch('/logout', {method:'POST'})
         setTimeout(function(){location.reload()},100)
     }
+    function go_to_lk(){
+        location.href = '/lk'
+    }
     function go_to_login(){
         location.href = '/login'
+    }
+    function go_to_main(){
+        location.href = '/'
     }
     function go_to_register(){
         location.href = '/register'

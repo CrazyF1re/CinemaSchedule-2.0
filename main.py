@@ -105,10 +105,14 @@ def register(request: Request):
 @app.get('/lk')
 def lk(request:Request):
     if (request.cookies.get('token')):
-        return 0
+        lst = jwt.decode(request.cookies.get('token'), SECRET, algorithms=["HS256"])
+        
+        email = lst['email']
+        #get info about planned sending emails 
+        return templates.TemplateResponse(request=request, name='lk.html', context={'email':email, "go_back":request.headers.get('referer')})
     return RedirectResponse('/')
     
-    #get info about planned sending emails 
+    
 
 
 @app.post('/register')
@@ -150,11 +154,38 @@ async def login_user(email: Annotated[str, Form()], password: Annotated[str, For
         return templates.TemplateResponse(request=request,name='login.html', context={"bad":True})
 
 @app.post('/logout')
-async def logout_user(response:Response):
-    resp = RedirectResponse('/', status_code= status.HTTP_302_FOUND)
-    resp.delete_cookie('token')
-    return resp
+async def logout_user():
     #check cookies and look for JWT token
     #logout user if token was founded
     #return some template if user has no token
+    resp = RedirectResponse('/', status_code= status.HTTP_302_FOUND)
+    resp.delete_cookie('token')
+    return resp
+    
 
+@app.post('/film/delete')
+async def delete_sending_message(films:list = Form()):
+    print(films)
+    #delete choosen strings from database
+    return 0
+
+@app.post('/lk/delete')
+async def delete_account(request:Request):
+    if(request.cookies.get('token')):
+        id = jwt.decode(request.cookies.get('token'), SECRET, algorithms=["HS256"])['id']
+        engine = database.user_engine
+        meta = MetaData()
+        meta.reflect(engine)
+        users = meta.tables['user']
+        with engine.connect() as connection:
+            connection.execute(users.delete().where(users.c.id == id))
+            connection.commit()
+        resp = RedirectResponse('/', status_code= status.HTTP_302_FOUND)
+        resp.delete_cookie('token')
+        
+        return resp
+    
+
+    #delete JWT token for response like logout
+    #delete string into database
+    pass

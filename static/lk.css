@@ -36,6 +36,9 @@ body{
     border-radius: 10px;
     font-size: 18px;
 }
+.delete_accaunt:hover{
+    cursor: pointer;
+}
 .list{
     display: flex;
     flex-direction: column;
@@ -55,7 +58,7 @@ ul>li>input{
 ul>li{
     font-size: 26px;
     border:1px solid white;
-    padding: 15px;
+    padding: 30px;
 }
 .go_back{
     background-color: rgb(144, 78, 244);
@@ -66,6 +69,31 @@ ul>li{
     border-radius: 15px;
     display: block;
     margin-right: 930px;
+}
+.go_back:hover{
+    cursor: pointer;
+}
+.add_film_to_list{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.film{
+    width: 250px;
+    height: 25px;
+    font-size: 20px;
+    border: none;
+    margin: 10px;
+    border-radius: 5px;
+}
+.add_film{
+    width: 150px;
+    height: 25px;
+    padding: 3px;
+    text-align: center;
+    border: none;
+    border-radius: 7px;
+    background-color: rgb(116, 255, 206);
 }
 @media (max-width:1050px){
     body,header{

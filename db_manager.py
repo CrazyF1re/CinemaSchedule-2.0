@@ -13,13 +13,15 @@ import os
 
 class manager():
     def __init__(self):
-        self.user_engine = create_engine("sqlite:///user.db")
-        self.film_engine = create_engine('sqlite:///database.db')
-        self.init_db()
+        self.user_engine = create_engine("sqlite:///databases/user.db")
+        self.film_engine = create_engine('sqlite:///databases/flims.db')
+        self.message_engine = create_engine('sqlite:///databases/send_message.db')
+        self.init_films_db()
         self.init_users_db()
-    def init_db(self):
-        if(not os.path.isfile('./database.db')):
-            create_database(self.user_engine.url)
+        self.init_send_message_db()
+    def init_films_db(self):
+        if(not os.path.isfile('./databases/films.db')):
+            create_database(self.film_engine.url)
             meta = MetaData()
             cinema_table = Table(
                 'cinema_table',meta,
@@ -48,19 +50,30 @@ class manager():
                         {'name':"Kinooctober"},
                         {'name':"Kinopolis"},
                         {'name':"Kinoseversk"}]))
-                
                 connection.commit()
+
     def init_users_db(self):
-        if(not os.path.isfile('./user.db')):
+        if(not os.path.isfile('./databases/user.db')):
             create_database(self.user_engine.url)
             meta = MetaData()
             users = Table(
                     'user',meta,
                     Column('id',Integer,primary_key=True),
                     Column('email',String),
-                    Column('hashed_password',String),
+                    Column('hashed_password',String)
                 )
             meta.create_all(self.user_engine)
+
+    def init_send_message_db(self):
+        if(not os.path.isfile('./databases/send_message.db')):
+            create_database(self.message_engine.url)
+            meta = MetaData()
+            user = Table('users', meta,
+                          Column('id', Integer),
+                          Column('email',String),
+                          Column('film',String))
+            meta.create_all(self.message_engine)
+
     def update_db(self):
         res = {}
 
@@ -76,7 +89,7 @@ class manager():
             i+=1
 
         #refill database with fresh data
-        engine = create_engine('sqlite:///database.db')
+        engine = self.film_engine
         meta = MetaData()
         meta.reflect(engine)
         film_table = meta.tables['film_table']

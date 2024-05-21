@@ -16,6 +16,9 @@ header>pre{
     font-family: Courier, monospace;
     font-weight: lighter;
 }
+header>pre:hover{
+    cursor: pointer;
+}
 .list{
     padding:0;
     margin: auto;

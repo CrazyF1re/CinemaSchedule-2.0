@@ -11,7 +11,7 @@
 </head>
 <body>
     <header>
-        <pre>Cinema Schedule</pre>
+        <pre onclick="go_to_main()">Cinema Schedule</pre>
         {% if token %}
         <button class="login" onclick="logout()">Выйти</button>
         <button class="register" onclick="go_to_lk()">Личный кабинет</button>
@@ -64,6 +64,9 @@
     </footer>
 </body>
 <script>
+    function go_to_main(){
+        location.href = '/'
+    }
     function go_to_lk(){
         location.href = '/lk'
     }

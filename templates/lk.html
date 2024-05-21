@@ -9,31 +9,33 @@
     <title>Личный кабинет</title>
 </head>
 <body>
-    <button class="go_back">Назад</button>
-    <header>
-        <div class="email">vova.plisko@mail.ru</div>
-    </header>
-    <h3>Список фильмов для уведомлений</h3>
-    <form action="" class="list">
-        <ul>
-            <li><input type="checkbox"> рассылка 1<br /></li>
-            <li><input type="checkbox"> рассылка 2<br /></li>
-            <li><input type="checkbox"> рассылка 3<br /></li>
-            <li><input type="checkbox"> рассылка 4<br /></li>
-            <li><input type="checkbox"> рsdfdsассылка 5<br /></li>
-            <li><input type="checkbox"> рассылка 6<br /></li>
-            <li><input type="checkbox"> рассылка 7<br /></li>
-        </ul>
-        
-        
-        
+    <form action={{go_back}}>
+        <button class="go_back" type="submit">Назад</button>
     </form>
-    <button class="delete_accaunt" onclick="delete_acc()">Удалить рассылку</button>
-    <button class="delete_accaunt" onclick="delete_acc()">Удалить аккаунт</button>
+    <header>
+        <div class="email">{{email}}</div>
+    </header>
+    <div style="font-size: 25px;margin-bottom: 15px; text-align: center;">Список фильмов для уведомлений</div>
+    <form action="/film/delete" class="delete_list" method="POST">
+        <ul>
+            <li name="element"><input type="checkbox" name="films" value="1"> рассылка 1<br /></li>
+            <li name="element"><input type="checkbox" name="films" value="2"> рассылка 2<br /></li>
+            <li name="element"><input type="checkbox" name="films" value="3"> рассылка 3<br /></li>
+            <li name="element"><input type="checkbox" name="films" value="4"> рассылка 4<br /></li>
+            <li name="element"><input type="checkbox" name="films" value="5"> рsdfdsассылка 5<br /></li>
+            <li name="element"><input type="checkbox" name="films" value="6"> рассылка 6<br /></li>
+            <li name="element"><input type="checkbox" name="films" value="7"> рассылка 7<br /></li>
+            <button class="delete_accaunt" type="submit">Удалить рассылку</button>
+        </ul>
+    </form>
+    
+    <div>Добавить фильм для уведомления</div>
+    <form action="/film/add_film" class="add_film_to_list" method="POST">
+        <input type="text" class="film">
+        <button type="submit" class="add_film">Добавить</button>
+    </form>
+    <form action="/lk/delete" method="POST">
+        <button class="delete_accaunt" type="submit">Удалить аккаунт</button>
+    </form>
 </body>
-<script>
-    function delete_acc(){
-        // post request to delete acc
-    }
-</script>
 </html>
