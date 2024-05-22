@@ -2,4 +2,4 @@
 /venv
 database.db
 /parsers/__pycache__
-*.db
+/databases
