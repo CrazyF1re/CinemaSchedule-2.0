@@ -5,37 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/425/425868.png" type="image/x-icon">
     <link rel="stylesheet" href="{{ url_for('static', path='/lk.css') }}">
-    <link rel="stylesheet" href="../static/lk.css">
     <title>Личный кабинет</title>
 </head>
 <body>
-    <form action={{go_back}}>
-        <button class="go_back" type="submit">Назад</button>
-    </form>
     <header>
+        <pre onclick="go_to_main()">Cinema Schedule</pre>
+        {% if token %}
+        <button class="login" onclick="logout()">Выйти</button>
+        <button class="register" onclick="go_to_main()">На главную</button>
+        {% else %}
+            <button class="login" onclick="go_to_login()">Войти</button>
+            <button class="register" onclick="go_to_register()">Зарегистрироваться</button>
+        {% endif %}
         <div class="email">{{email}}</div>
     </header>
     <div style="font-size: 25px;margin-bottom: 15px; text-align: center;">Список фильмов для уведомлений</div>
     <form action="/film/delete" class="delete_list" method="POST">
         <ul>
-            <li name="element"><input type="checkbox" name="films" value="1"> рассылка 1<br /></li>
-            <li name="element"><input type="checkbox" name="films" value="2"> рассылка 2<br /></li>
-            <li name="element"><input type="checkbox" name="films" value="3"> рассылка 3<br /></li>
-            <li name="element"><input type="checkbox" name="films" value="4"> рассылка 4<br /></li>
-            <li name="element"><input type="checkbox" name="films" value="5"> рsdfdsассылка 5<br /></li>
-            <li name="element"><input type="checkbox" name="films" value="6"> рассылка 6<br /></li>
-            <li name="element"><input type="checkbox" name="films" value="7"> рассылка 7<br /></li>
+            {% for film in films -%}
+                <li name="element"><input type="checkbox" name="films" value= "{{film[0]}}">{{film[0]}}<br /></li>
+            {% endfor -%}
+            
             <button class="delete_accaunt" type="submit">Удалить рассылку</button>
         </ul>
     </form>
     
     <div class="add_film_header">Добавить фильм для уведомления</div>
     <form action="/film/add_film" class="add_film_to_list" method="POST">
-        <input type="text" class="film">
+        <input type="text" class="film" name="film">
         <button type="submit" class="add_film">Добавить</button>
     </form>
     <form action="/lk/delete" method="POST">
         <button class="delete_accaunt" type="submit">Удалить аккаунт</button>
     </form>
 </body>
+<script>
+    function logout(){
+        fetch('/logout', {method:'POST'})
+        setTimeout(function(){location.reload()},100)
+    }
+    function go_to_login(){
+        location.href = '/login'
+    }
+    function go_to_main(){
+        location.href = '/'
+    }
+    function go_to_register(){
+        location.href = '/register'
+    }
+</script>
 </html>

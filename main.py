@@ -108,12 +108,16 @@ def lk(request:Request):
         lst = jwt.decode(request.cookies.get('token'), SECRET, algorithms=["HS256"])
         
         email = lst['email']
+        engine = database.message_engine
+        meta = MetaData()
+        meta.reflect(engine)
+        user = meta.tables['users']
+        with engine.connect() as connection:
+            films = connection.execute(user.select().where(user.c.id == lst['id']).with_only_columns(user.c.film)).fetchall()
         #get info about planned sending emails 
-        return templates.TemplateResponse(request=request, name='lk.html', context={'email':email, "go_back":request.headers.get('referer')})
+        return templates.TemplateResponse(request=request, name='lk.html', context={'email':email,'films':films, 'token':True})
     return RedirectResponse('/')
     
-    
-
 
 @app.post('/register')
 async def register_user( email: Annotated[str, Form()], password: Annotated[str, Form()], request: Request):
@@ -153,6 +157,7 @@ async def login_user(email: Annotated[str, Form()], password: Annotated[str, For
             return res
         return templates.TemplateResponse(request=request,name='login.html', context={"bad":True})
 
+
 @app.post('/logout')
 async def logout_user():
     #check cookies and look for JWT token
@@ -161,13 +166,25 @@ async def logout_user():
     resp = RedirectResponse('/', status_code= status.HTTP_302_FOUND)
     resp.delete_cookie('token')
     return resp
-    
+
 
 @app.post('/film/delete')
-async def delete_sending_message(films:list = Form()):
+async def delete_sending_message(request:Request,films:Annotated[list,Form()] = None):
     print(films)
-    #delete choosen strings from database
-    return 0
+    if(films == None):
+        return RedirectResponse('/lk',status_code= status.HTTP_302_FOUND)    
+    info = jwt.decode(request.cookies.get('token'), SECRET, algorithms=["HS256"])
+    id,email = info['id'],info['email']
+    engine = database.message_engine
+    meta = MetaData()
+    meta.reflect(engine)
+    user = meta.tables['users']
+    with engine.connect() as connection:
+        connection.execute(user.delete().where(user.c.id == id).where(user.c.email == email).where(user.c.film.in_(films)))
+        connection.commit()
+    return RedirectResponse('/lk',status_code= status.HTTP_302_FOUND)
+
+
 
 @app.post('/lk/delete')
 async def delete_account(request:Request):
@@ -184,8 +201,21 @@ async def delete_account(request:Request):
         resp.delete_cookie('token')
         
         return resp
-    
 
-    #delete JWT token for response like logout
-    #delete string into database
-    pass
+
+@app.post('/film/add_film')
+async def add_film(request:Request, film: Annotated[str , Form()]= None):
+    if film==None:
+        return RedirectResponse('/lk',status_code= status.HTTP_302_FOUND)
+    info = jwt.decode(request.cookies.get('token'), SECRET, algorithms=["HS256"])
+    id,email = info['id'],info['email']
+    print(id,email)
+    engine = database.message_engine
+    meta = MetaData()
+    meta.reflect(engine)
+    user = meta.tables['users']
+    with engine.connect() as connection:
+        connection.execute(insert(user).values(id = id, email = email, film = film))
+        connection.commit()
+    return RedirectResponse('/lk',status_code= status.HTTP_302_FOUND)
+

@@ -18,7 +18,47 @@ body{
     margin-top:50px ;
     
 }
+header{
+    font-size: 40px;
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    margin:0;
+}
+header>pre{
+    font-family: Courier, monospace;
+    font-weight: lighter;
+    margin-top: 0;
+    margin-bottom: 80px;
+}
+header>pre:hover{
+    cursor: pointer;
+}
+.login, .register {
+    width: 170px;
+    height: 40px;
+    margin: 10px;
+    position: absolute;
+    background-color: rgb(0, 255, 149);
+    border: none;
+    border-radius: 7px;
+    font-size: 16px;
+    transition: 1.5s;
+}
+.login{
+    top:65px;
+    right: 2%;
+    
+}
+.register{
+    top:5px;
+    right: 2%;
+}
 
+.register:hover, .login:hover{
+    background-color: rgb(246, 255, 0);
+    
+}
 .email{
     
     font-size: 28px;
