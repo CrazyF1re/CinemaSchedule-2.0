@@ -90,15 +90,22 @@ header>pre:hover{
 ul{
     list-style-type: none;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 ul>li>input{
     transform:scale(1.5);
     margin: 10px;
+    display: flex;
+    align-items: center;
 }
 ul>li{
     font-size: 26px;
     border:1px solid white;
     padding: 30px;
+    display: flex;
+    width: 400px;
 }
 .go_back{
     background-color: rgb(144, 78, 244);
@@ -145,10 +152,18 @@ ul>li{
 @media (max-width:1050px){
     body,header{
         width: 375px;
+        margin-top: 150px;
+    }
+    .login,.register{
+        right: calc(50% - 90px);
     }
     .go_back{
         margin-right: 310px;
     }
+    ul>li{
+        width: 300px;
+    }
+
 }
 @media (max-width:410px){
     body,header{
