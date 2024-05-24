@@ -3,3 +3,4 @@
 database.db
 /parsers/__pycache__
 /databases
+config.py

@@ -3,7 +3,7 @@ import parsers.kinomax_api
 import parsers.kinooctober_api
 import parsers.kinopolis_api
 import parsers.kinoseversk_api
-from sqlalchemy import MetaData,Table,Column,Integer,String,create_engine,ForeignKey,Date,DateTime,text,insert,select,Boolean
+from sqlalchemy import MetaData,Table,Column,Integer,String,create_engine,ForeignKey,DateTime,text,insert,select
 from sqlalchemy_utils import create_database
 from sqlalchemy.sql.expression import bindparam
 

@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, Response,Form, status
+from fastapi import FastAPI, Request,Form, status
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import MetaData,insert
@@ -9,12 +9,13 @@ from db_manager import manager
 import bcrypt
 from typing import Annotated
 import jwt
+from config import JWT_KEY
 
 app = FastAPI()
 templates = Jinja2Templates(directory='templates')
 database = manager()
 
-SECRET = "SECRET"
+
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -105,7 +106,7 @@ def register(request: Request):
 @app.get('/lk')
 def lk(request:Request):
     if (request.cookies.get('token')):
-        lst = jwt.decode(request.cookies.get('token'), SECRET, algorithms=["HS256"])
+        lst = jwt.decode(request.cookies.get('token'), JWT_KEY, algorithms=["HS256"])
         
         email = lst['email']
         engine = database.message_engine
@@ -134,7 +135,7 @@ async def register_user( email: Annotated[str, Form()], password: Annotated[str,
         user_id = connection.execute(users.select().where(users.c.email == email).with_only_columns(users.c.id)).fetchone()[0]
     
     #get JWT to user
-    encoded_jwt = jwt.encode({"id": user_id, "email":email}, SECRET, algorithm="HS256")
+    encoded_jwt = jwt.encode({"id": user_id, "email":email}, JWT_KEY, algorithm="HS256")
     #set JWT into cookie
     res = RedirectResponse('/', status_code= status.HTTP_302_FOUND)
     res.set_cookie(key="token",value=encoded_jwt, httponly=True)
@@ -151,7 +152,7 @@ async def login_user(email: Annotated[str, Form()], password: Annotated[str, For
     with engine.connect() as connection:
         user_info = connection.execute(users.select().where(users.c.email == email).with_only_columns(users.c.hashed_password, users.c.id)).fetchone()
         if(user_info and bcrypt.checkpw(str.encode(password), user_info[0])):
-            encoded_jwt = jwt.encode({"id": user_info[1], "email": email}, SECRET, algorithm="HS256")
+            encoded_jwt = jwt.encode({"id": user_info[1], "email": email}, JWT_KEY, algorithm="HS256")
             res = RedirectResponse('/', status_code= status.HTTP_302_FOUND)
             res.set_cookie(key="token",value=encoded_jwt, httponly=True)
             return res
@@ -173,7 +174,7 @@ async def delete_sending_message(request:Request,films:Annotated[list,Form()] = 
     print(films)
     if(films == None):
         return RedirectResponse('/lk',status_code= status.HTTP_302_FOUND)    
-    info = jwt.decode(request.cookies.get('token'), SECRET, algorithms=["HS256"])
+    info = jwt.decode(request.cookies.get('token'), JWT_KEY, algorithms=["HS256"])
     id,email = info['id'],info['email']
     engine = database.message_engine
     meta = MetaData()
@@ -189,7 +190,7 @@ async def delete_sending_message(request:Request,films:Annotated[list,Form()] = 
 @app.post('/lk/delete')
 async def delete_account(request:Request):
     if(request.cookies.get('token')):
-        id = jwt.decode(request.cookies.get('token'), SECRET, algorithms=["HS256"])['id']
+        id = jwt.decode(request.cookies.get('token'), JWT_KEY, algorithms=["HS256"])['id']
         engine = database.user_engine
         meta = MetaData()
         meta.reflect(engine)
@@ -207,7 +208,7 @@ async def delete_account(request:Request):
 async def add_film(request:Request, film: Annotated[str , Form()]= None):
     if film==None:
         return RedirectResponse('/lk',status_code= status.HTTP_302_FOUND)
-    info = jwt.decode(request.cookies.get('token'), SECRET, algorithms=["HS256"])
+    info = jwt.decode(request.cookies.get('token'), JWT_KEY, algorithms=["HS256"])
     id,email = info['id'],info['email']
     print(id,email)
     engine = database.message_engine

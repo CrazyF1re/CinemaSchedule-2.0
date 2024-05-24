@@ -3,12 +3,11 @@ from difflib import SequenceMatcher
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import smtplib
-import time
-
+from config import MAIL_PWD, MAIL
 class scheduler:
     def __init__(self):
-        self.my_mail = 'cinema.schedule@mail.ru'
-        self.mail_password = 'fKV9N7HLq9gsst0sff9e'
+        self.my_mail = MAIL
+        self.mail_password = MAIL_PWD
         self.message_engine = create_engine('sqlite:///databases/send_message.db')
         self.film_engine = create_engine('sqlite:///databases/flims.db')
         self.smtp_server = smtplib.SMTP_SSL('smtp.mail.ru', 465)
