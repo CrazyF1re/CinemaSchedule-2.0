@@ -14,7 +14,7 @@ def loop():
 
 schedule.every().day.at("13:00").do(loop)
 
-# loop()
+loop()
 scheduler_instance.check_films()
 while True:
     schedule.run_pending()
