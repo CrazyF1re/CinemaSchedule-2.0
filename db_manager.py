@@ -19,6 +19,7 @@ class manager():
         self.init_films_db()
         self.init_users_db()
         self.init_send_message_db()
+        
     def init_films_db(self):
         if(not os.path.isfile('./databases/films.db')):
             create_database(self.film_engine.url)

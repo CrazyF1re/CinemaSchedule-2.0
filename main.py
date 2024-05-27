@@ -161,9 +161,6 @@ async def login_user(email: Annotated[str, Form()], password: Annotated[str, For
 
 @app.post('/logout')
 async def logout_user():
-    #check cookies and look for JWT token
-    #logout user if token was founded
-    #return some template if user has no token
     resp = RedirectResponse('/', status_code= status.HTTP_302_FOUND)
     resp.delete_cookie('token')
     return resp
@@ -195,6 +192,12 @@ async def delete_account(request:Request):
         meta = MetaData()
         meta.reflect(engine)
         users = meta.tables['user']
+        with engine.connect() as connection:
+            connection.execute(users.delete().where(users.c.id == id))
+            connection.commit()
+        engine = database.message_engine
+        meta.reflect(engine)
+        users = meta.tables['users']
         with engine.connect() as connection:
             connection.execute(users.delete().where(users.c.id == id))
             connection.commit()
